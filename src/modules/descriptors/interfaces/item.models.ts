@@ -21,6 +21,8 @@ export interface IImageModel {
   _id?: string;
   name: string;
   uri: string;
+  typeImage: string;
+  order: number;
   traduction: Array<IImageTraductionModel>;
 }
 

@@ -39,13 +39,14 @@ export class Mapper {
           fieldResult.push({
             name: fieldFiltered.name.toString(),
             value: valueField,
-            type: fieldFiltered.typeField,
+            type: fieldFiltered.typeField.toString(),
+            order: 99
           });
       }
 
       if (fieldResult.length > 0)
         itemResult.push({
-          _id: item._id,
+          _id: item._id.toString(),
           fields: fieldResult,
           name: item.name,
         });
@@ -88,6 +89,8 @@ export class Mapper {
         imageResult.push({
           name: traduction.name,
           uri: imageValue.uri,
+          order: imageValue.order,
+          type: imageValue.typeImage
         });
     }
 

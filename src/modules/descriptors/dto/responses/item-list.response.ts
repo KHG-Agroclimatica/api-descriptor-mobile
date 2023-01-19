@@ -1,18 +1,21 @@
 export class ItemListResponse {
-    _id: String;
-    name: String;
+    _id: string;
+    name: string;
     fields: Array<ItemFieldsContent>
 }
 
 export interface ItemFieldsContent {
-    name: String;
-    type: String;
+    name: string;
+    type: string;
+    order: number;
     value: FieldValueType; 
 }
 
 export interface ImageType  {
-    name: String;
-    uri: String;
+    order: number;
+    type: string;
+    name: string;
+    uri: string;
 }
 
-export type FieldValueType = String | Array<ImageType>
+export type FieldValueType = string | Array<ImageType>

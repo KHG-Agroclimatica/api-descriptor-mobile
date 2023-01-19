@@ -1,11 +1,12 @@
 import mongoose, { HydratedDocument } from "mongoose";
 import { IFieldValueModel } from "../interfaces/item.models";
+import { DescriptorModel } from "./Descriptor.schema";
 
 export type ItemDocument = HydratedDocument<ItemModel>;
 
 export interface ItemModel {
   _id: String;
-  descriptorId: String;
+  descriptorId: String | DescriptorModel;
   name: string;
   fields?: Array<IFieldValueModel>;
   countries?: Array<String>;
