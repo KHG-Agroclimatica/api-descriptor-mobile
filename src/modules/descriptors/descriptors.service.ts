@@ -28,12 +28,11 @@ export class DescriptorsService {
         descriptorId: params.descriptorId,
         countries: params.country,
         isActive: true,
-      });
+      })
 
       if (!itemList)
         throw new HttpException('Not found itemList', HttpStatus.NOT_FOUND);
 
-        
       const fieldModel = await this.fieldModel.find({
         isActive: true,
       });
