@@ -6,6 +6,7 @@ import { ItemSchema } from './schemas/Item.schema';
 import { Mapper } from './utils/mapper';
 import { FieldSchema } from './schemas/Field.schema';
 import { DescriptorScheme } from './schemas/Descriptor.schema';
+import { DescriptorRepository } from './descriptor.repository';
 
 @Module({
   imports: [
@@ -16,6 +17,6 @@ import { DescriptorScheme } from './schemas/Descriptor.schema';
     ]),
   ],
   controllers: [DescriptorsController],
-  providers: [DescriptorsService, Mapper],
+  providers: [DescriptorsService, Mapper, DescriptorRepository],
 })
 export class DescriptorsModule {}

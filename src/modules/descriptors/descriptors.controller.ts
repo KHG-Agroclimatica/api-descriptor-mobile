@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, ForbiddenException, Get, Param, UseFilters } from '@nestjs/common';
 import { DescriptorsService } from './descriptors.service';
 import { GetItemsParams } from './dto/get-items.params';
 
@@ -8,7 +8,7 @@ export class DescriptorsController {
 
   @Get(':language-:country/:descriptorId')
   async GetItems(@Param() params: GetItemsParams){
-    return await this.descriptorsService.GetItems(params);
+      return await this.descriptorsService.GetItems(params);
   }
 
   @Get()

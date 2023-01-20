@@ -24,7 +24,7 @@ export const DescriptorScheme = new mongoose.Schema<DescriptorModel>(
         fieldId: {
           type: mongoose.SchemaTypes.ObjectId,
           required: true,
-          ref: 'Field',
+          ref: 'fields',
         },
         order: { type: Number, required: true },
       },
