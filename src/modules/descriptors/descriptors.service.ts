@@ -3,9 +3,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { GlobalResponse } from 'src/global/global.response';
 import { DescriptorRepository } from './descriptor.repository';
-import { FilterItemsDTO, ItemsByReferenceParams, LanguageParams } from './dto/request';
-import { GetItemsParams } from './dto/request/get-items.params';
-import { DescriptorDetailResponse } from './dto/responses/descriptor-detail.response';
+import { FilterItemsDTO, ItemsByReferenceParams, LanguageParams, GetItemsParams } from './dto/request';
+import { DescriptorDetailResponse } from './dto/responses';
 import { FieldDocument } from './schemas/Field.schema';
 import { ItemDocument } from './schemas/Item.schema';
 import { descriptorMapperDetail } from './utils/descriptor-mapper-detail';
@@ -66,6 +65,28 @@ export class DescriptorsService {
   }
 
   async filterAdvanceQuery(params: LanguageParams, filterDTO: FilterItemsDTO) {
+    if(filterDTO.relatedTo && !filterDTO.descriptorId)
+      throw new BadRequestException('Please add descriptorId');
     
+    let filterQuery = {};
+
+    if(filterDTO.descriptorId)
+      filterQuery = {
+        descriptorId: filterDTO.descriptorId
+      }
+    
+    if(filterDTO.itemId)
+    filterQuery = {
+      ...filterQuery,
+      itemId: filterDTO.itemId
+    }
+      filterQuery['_id'] = filterDTO.itemId;
+    
+    if(filterDTO.relatedTo) 
+      filterQuery['referencesIds'] = filterDTO.relatedTo;
+
+    const itemsFiltered = await this.itemModel.find({
+
+    })
   }
 }
