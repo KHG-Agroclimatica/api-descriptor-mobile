@@ -8,7 +8,7 @@ import { DescriptorDetailResponse } from './dto/responses/descriptor-detail.resp
 import { FieldDocument } from './schemas/Field.schema';
 import { ItemDocument } from './schemas/Item.schema';
 import { descriptorMapperDetail } from './utils/descriptor-mapper-detail';
-import { DescriptorUtil } from './utils/descriptor.util';
+import { filterActiveFields } from './utils/descriptor.util';
 import { Mapper } from './utils/mapper';
 
 @Injectable()
@@ -17,8 +17,7 @@ export class DescriptorsService {
     @InjectModel('items') private itemModel: Model<ItemDocument>,
     @InjectModel('fields') private fieldModel: Model<FieldDocument>,
     private readonly mapper: Mapper,
-    private readonly descriptorRepository: DescriptorRepository,
-    private readonly descriptorUtil: DescriptorUtil,
+    private readonly descriptorRepository: DescriptorRepository
   ) {}
 
   async filterDescriptorById(descriptorId: string): Promise<DescriptorDetailResponse> {
@@ -34,7 +33,7 @@ export class DescriptorsService {
     const descriptor = await this.descriptorRepository.filterDescriptorById(
       params.descriptorId,
     );
-    const fields = this.descriptorUtil.filterActiveFields(descriptor);
+    const fields = filterActiveFields(descriptor);
 
     const itemList = await this.itemModel.find({
       descriptorId: params.descriptorId,

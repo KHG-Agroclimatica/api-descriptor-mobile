@@ -7,7 +7,6 @@ import { Mapper } from './utils/mapper';
 import { FieldSchema } from './schemas/Field.schema';
 import { DescriptorSchema } from './schemas/Descriptor.schema';
 import { DescriptorRepository } from './descriptor.repository';
-import { DescriptorUtil } from './utils/descriptor.util';
 import { ClassificationSchema } from './schemas/Classification.schema';
 import { RelationshipSchema } from './schemas/RelationShip.schema';
 
@@ -22,6 +21,6 @@ import { RelationshipSchema } from './schemas/RelationShip.schema';
     ]),
   ],
   controllers: [DescriptorsController],
-  providers: [DescriptorsService, Mapper, DescriptorRepository, DescriptorUtil],
+  providers: [DescriptorsService, Mapper, DescriptorRepository],
 })
 export class DescriptorsModule {}
