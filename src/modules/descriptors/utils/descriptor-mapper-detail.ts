@@ -7,15 +7,17 @@ import { DescriptorModel } from '../schemas/Descriptor.schema';
 export function descriptorMapperDetail(
   descriptor: DescriptorModel,
 ): DescriptorDetailResponse {
-  const fields = descriptor.fields.map(({ fieldId: field, order }) => {
-    const result: FieldDetailResponse = {
-      name: field.name,
-      description: field.description,
-      order: order,
-      type: field.typeField.toString(),
-    };
+  const fields: FieldDetailResponse[] = [];
 
-    return result;
+  descriptor.fields.filter(({ fieldId: field, order }) => {
+    if (field) {
+      fields.push({
+        name: field.name,
+        description: field.description,
+        order: order,
+        type: field.typeField.toString(),
+      });
+    }
   });
 
   return {

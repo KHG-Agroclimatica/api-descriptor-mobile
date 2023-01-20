@@ -19,6 +19,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
         ? exception.getStatus()
         : HttpStatus.INTERNAL_SERVER_ERROR;
 
+        console.log(exception);
     const responseBody: GlobalResponse = {
       statusCode: status,
       data: null,

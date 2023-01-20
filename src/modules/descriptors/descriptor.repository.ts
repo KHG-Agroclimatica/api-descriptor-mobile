@@ -5,9 +5,12 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { ItemsByReferenceParams } from './dto/request';
 import {
   DescriptorDocument,
+  DescriptorModel,
 } from './schemas/Descriptor.schema';
+import { ItemDocument } from './schemas/Item.schema';
 
 @Injectable()
 export class DescriptorRepository {
@@ -16,11 +19,11 @@ export class DescriptorRepository {
     private descriptorModel: Model<DescriptorDocument>,
   ) {}
 
-  async filterDescriptorById(descriptorId: string) {
+  async filterDescriptorById(descriptorId: string): Promise<DescriptorModel> {
     try {
       const descriptor = await this.descriptorModel
         .findOne({ id: descriptorId, isActive: true })
-        .populate('fields.fieldId')
+        .populate({ path: 'fields.fieldId', match: { isActive: 'true' } })
         .populate('classificationId')
         .populate('relationshipId');
 

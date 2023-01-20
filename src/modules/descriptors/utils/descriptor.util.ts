@@ -4,15 +4,11 @@ import {
 } from '../dto/responses/descriptor-detail.response';
 import { DescriptorModel } from '../schemas/Descriptor.schema';
 
-export const filterActiveFields = (descriptor: DescriptorModel) =>
-  descriptor.fields.filter((field) => field.fieldId.isActive == true);
-
 export function descriptorMapperDetail(
   descriptor: DescriptorModel,
 ): DescriptorDetailResponse {
-  const fieldsActivated = filterActiveFields(descriptor);
 
-  const fields = fieldsActivated.map(({ fieldId: field, order }) => {
+  const fields = descriptor.fields.map(({ fieldId: field, order }) => {
     const result: FieldDetailResponse = {
       name: field.name,
       description: field.description,

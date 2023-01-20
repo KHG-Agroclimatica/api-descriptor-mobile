@@ -1,3 +1,5 @@
+import { FieldModel } from "../schemas/Field.schema";
+
 export interface IValueTraductionModel {
   _id?: string;
   language: String;
@@ -7,7 +9,7 @@ export interface IValueTraductionModel {
 
 export interface IFieldValueModel {
   _id?: string;
-  fieldId: string;
+  fieldId: string | FieldModel;
   value: Array<IValueTraductionModel | IImageModel>;
 }
 

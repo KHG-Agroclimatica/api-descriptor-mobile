@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { GetItemsParams } from '../dto/get-items.params';
+import { GetItemsParams } from '../dto/request/get-items.params';
 import {
   FieldValueType,
   ImageType,
@@ -12,7 +12,6 @@ import {
   IValueTraductionModel,
   ValueFieldType,
 } from '../interfaces/item.models';
-import { FieldModel } from '../schemas/Field.schema';
 import { ItemModel } from '../schemas/Item.schema';
 
 @Injectable()
@@ -26,35 +25,38 @@ export class Mapper {
 
     for (const item of itemList) {
       let fieldResult: ItemFieldsContent[] = [];
+      
+      for (const { fieldId: fieldDescriptor, order } of fieldList) {
+        if (!order) continue;
 
-      for (const field of item.fields) {
-        const fieldFiltered = fieldList.find(
-          (i) => i.fieldId._id == field.fieldId,
+        let valueField = null;
+
+        const itemField = item.fields.find(
+          (field) => field.fieldId.toString() == fieldDescriptor._id.toString(),
         );
 
-        const valueField = this.getFieldValue(fieldFiltered.fieldId.typeField, {
-          value: field.value,
-          language: params.language,
-          country: params.country,
-        });
-
-        if (valueField != null) {
-          fieldResult.push({
-            name: fieldFiltered.fieldId.name.toString(),
-            value: valueField,
-            type: fieldFiltered.fieldId.typeField.toString(),
-            order: fieldFiltered.order,
+        if (itemField) {
+          valueField = this.getFieldValue(fieldDescriptor.typeField, {
+            value: itemField.value,
+            language: params.language,
+            country: params.country,
           });
         }
-      }
 
-      if (fieldResult.length > 0)
-        itemResult.push({
-          _id: item._id.toString(),
-          fields: fieldResult,
-          name: item.name,
-          referenceIds: item.referencesIds.map(i => i.toString()),
+        fieldResult.push({
+          name: fieldDescriptor.name.toString(),
+          value: valueField,
+          type: fieldDescriptor.typeField.toString(),
+          order: order,
         });
+      }
+    
+      itemResult.push({
+        _id: item._id.toString(),
+        fields: fieldResult,
+        name: item.name,
+        referenceIds: item.referencesIds
+      });
     }
 
     return itemResult;
