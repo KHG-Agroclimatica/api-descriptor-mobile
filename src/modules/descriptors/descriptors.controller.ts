@@ -1,12 +1,11 @@
-import {
-  Controller,
-  ForbiddenException,
-  Get,
-  Param,
-  UseFilters,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { DescriptorsService } from './descriptors.service';
-import { GetItemsParams, ItemsByReferenceParams } from './dto/request';
+import {
+  FilterItemsDTO,
+  GetItemsParams,
+  ItemsByReferenceParams,
+  LanguageParams,
+} from './dto/request';
 
 @Controller('descriptors')
 export class DescriptorsController {
@@ -24,8 +23,15 @@ export class DescriptorsController {
 
   @Get(':descriptorId/relatedTo/:referenceId')
   async filterItemsByRelated(@Param() params: ItemsByReferenceParams) {
-    console.log(params);
     return await this.descriptorsService.filterItemsByRelated(params);
+  }
+
+  @Post('/:language-:country/items')
+  async filterAdvanceQuery(
+    @Param() params: LanguageParams,
+    @Body() filterDTO: FilterItemsDTO,
+  ) {
+    return await this.descriptorsService.filterAdvanceQuery(params, filterDTO);
   }
 
   @Get()

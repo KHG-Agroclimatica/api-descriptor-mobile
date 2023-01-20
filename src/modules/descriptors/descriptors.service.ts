@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { GlobalResponse } from 'src/global/global.response';
 import { DescriptorRepository } from './descriptor.repository';
-import { ItemsByReferenceParams } from './dto/request';
+import { FilterItemsDTO, ItemsByReferenceParams, LanguageParams } from './dto/request';
 import { GetItemsParams } from './dto/request/get-items.params';
 import { DescriptorDetailResponse } from './dto/responses/descriptor-detail.response';
 import { FieldDocument } from './schemas/Field.schema';
@@ -13,6 +13,7 @@ import { Mapper } from './utils/mapper';
 
 @Injectable()
 export class DescriptorsService {
+  
   constructor(
     @InjectModel('items') private itemModel: Model<ItemDocument>,
     @InjectModel('fields') private fieldModel: Model<FieldDocument>,
@@ -53,16 +54,18 @@ export class DescriptorsService {
     try {
       const itemsFiltered = await this.itemModel.find({
         descriptorId: params.descriptorId,
-        referencesIds: [params.referenceId],
+        referencesIds: params.referenceId,
         isActive: true,
-      }).populate('fields.fieldId');
+      })
+      .populate('fields.fieldId');
 
-      console.log(itemsFiltered);
       return itemsFiltered;
-
     } catch (err) {
-      console.log(err);
       throw new BadRequestException('Descriptor id is invalid');
     }
+  }
+
+  async filterAdvanceQuery(params: LanguageParams, filterDTO: FilterItemsDTO) {
+    
   }
 }

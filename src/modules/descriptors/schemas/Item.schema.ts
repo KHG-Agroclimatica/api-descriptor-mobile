@@ -16,7 +16,7 @@ export interface ItemModel {
 
 export const ItemSchema = new mongoose.Schema<ItemModel>({
   name: { type: String, required: true },
-  descriptorId: { type: mongoose.SchemaTypes.ObjectId, required: true },
+  descriptorId: { type: mongoose.SchemaTypes.ObjectId, required: true, ref: 'descriptors' },
   fields: [
     {
       _id: false,

@@ -27,7 +27,7 @@ export class Mapper {
       let fieldResult: ItemFieldsContent[] = [];
       
       for (const { fieldId: fieldDescriptor, order } of fieldList) {
-        if (!order) continue;
+        if (!fieldDescriptor) continue;
 
         let valueField = null;
 
