@@ -1,5 +1,7 @@
 import mongoose, { HydratedDocument } from 'mongoose';
 import { DescriptorField } from '../interfaces/descriptor.models';
+import { ClassificationModel } from './Classification.schema';
+import { RelationshipModel } from './RelationShip.schema';
 
 export type DescriptorDocument = HydratedDocument<DescriptorModel>;
 
@@ -9,12 +11,12 @@ export interface DescriptorModel {
   description: string;
   fields: Array<DescriptorField>;
   countries: Array<String>;
-  classificationId: String;
+  classificationId: String & ClassificationModel;
   isActive: boolean;
-  relationshipId: String;
+  relationshipId: String & RelationshipModel;
 }
 
-export const DescriptorScheme = new mongoose.Schema<DescriptorModel>(
+export const DescriptorSchema = new mongoose.Schema<DescriptorModel>(
   {
     name: { type: String, required: true },
     description: { type: String, required: true },
@@ -33,13 +35,13 @@ export const DescriptorScheme = new mongoose.Schema<DescriptorModel>(
     classificationId: {
       type: mongoose.SchemaTypes.ObjectId,
       required: true,
-      ref: 'Classification',
+      ref: 'classifications',
     },
     isActive: { type: Boolean, required: true, default: true },
     relationshipId: {
       type: mongoose.SchemaTypes.ObjectId,
       required: true,
-      ref: 'Relationship',
+      ref: 'relationships',
     },
   },
   { timestamps: true },

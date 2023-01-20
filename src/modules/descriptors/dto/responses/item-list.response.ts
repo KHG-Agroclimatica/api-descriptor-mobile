@@ -1,7 +1,8 @@
 export class ItemListResponse {
     _id: string;
     name: string;
-    fields: Array<ItemFieldsContent>
+    fields: Array<ItemFieldsContent>;
+    referenceIds: Array<string>;
 }
 
 export interface ItemFieldsContent {

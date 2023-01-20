@@ -1,7 +1,5 @@
 import {
   BadRequestException,
-  HttpException,
-  HttpStatus,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -9,7 +7,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import {
   DescriptorDocument,
-  DescriptorModel,
 } from './schemas/Descriptor.schema';
 
 @Injectable()
@@ -19,18 +16,20 @@ export class DescriptorRepository {
     private descriptorModel: Model<DescriptorDocument>,
   ) {}
 
-  async filterDescriptorAndGetFields(descriptorId: string) {
-    let descriptor: DescriptorModel;
+  async filterDescriptorById(descriptorId: string) {
+    try {
+      const descriptor = await this.descriptorModel
+        .findOne({ id: descriptorId, isActive: true })
+        .populate('fields.fieldId')
+        .populate('classificationId')
+        .populate('relationshipId');
 
-    try{
-      descriptor = await this.descriptorModel
-      .findById(descriptorId)
-      .populate('fields.fieldId');
-    }catch(err){
+      if (!descriptor) throw new NotFoundException('Descriptor not found');
+
+      return descriptor;
+    } catch (err) {
+      console.log(err);
       throw new BadRequestException('Descriptor id is invalid');
     }
-
-
-    if (!descriptor) throw new NotFoundException('Descriptor not found');
   }
 }

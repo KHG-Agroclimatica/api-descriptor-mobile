@@ -5,18 +5,23 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ItemSchema } from './schemas/Item.schema';
 import { Mapper } from './utils/mapper';
 import { FieldSchema } from './schemas/Field.schema';
-import { DescriptorScheme } from './schemas/Descriptor.schema';
+import { DescriptorSchema } from './schemas/Descriptor.schema';
 import { DescriptorRepository } from './descriptor.repository';
+import { DescriptorUtil } from './utils/descriptor.util';
+import { ClassificationSchema } from './schemas/Classification.schema';
+import { RelationshipSchema } from './schemas/RelationShip.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: 'items', schema: ItemSchema },
       { name: 'fields', schema: FieldSchema },
-      { name: 'descriptors', schema: DescriptorScheme },
+      { name: 'descriptors', schema: DescriptorSchema },
+      { name: 'classifications', schema: ClassificationSchema },
+      { name: 'relationships', schema: RelationshipSchema },
     ]),
   ],
   controllers: [DescriptorsController],
-  providers: [DescriptorsService, Mapper, DescriptorRepository],
+  providers: [DescriptorsService, Mapper, DescriptorRepository, DescriptorUtil],
 })
 export class DescriptorsModule {}

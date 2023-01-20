@@ -6,6 +6,7 @@ import {
   ItemFieldsContent,
   ItemListResponse,
 } from '../dto/responses/item-list.response';
+import { DescriptorField } from '../interfaces/descriptor.models';
 import {
   IImageModel,
   IValueTraductionModel,
@@ -18,7 +19,7 @@ import { ItemModel } from '../schemas/Item.schema';
 export class Mapper {
   mapItems(
     itemList: ItemModel[],
-    fieldList: FieldModel[],
+    fieldList: DescriptorField[],
     params: GetItemsParams,
   ): ItemListResponse[] {
     const itemResult: ItemListResponse[] = [];
@@ -27,21 +28,24 @@ export class Mapper {
       let fieldResult: ItemFieldsContent[] = [];
 
       for (const field of item.fields) {
-        const fieldFiltered = fieldList.find((i) => i._id == field.fieldId);
+        const fieldFiltered = fieldList.find(
+          (i) => i.fieldId._id == field.fieldId,
+        );
 
-        const valueField = this.getFieldValue(fieldFiltered.typeField, {
+        const valueField = this.getFieldValue(fieldFiltered.fieldId.typeField, {
           value: field.value,
           language: params.language,
           country: params.country,
         });
 
-        if (valueField != null)
+        if (valueField != null) {
           fieldResult.push({
-            name: fieldFiltered.name.toString(),
+            name: fieldFiltered.fieldId.name.toString(),
             value: valueField,
-            type: fieldFiltered.typeField.toString(),
-            order: 99
+            type: fieldFiltered.fieldId.typeField.toString(),
+            order: fieldFiltered.order,
           });
+        }
       }
 
       if (fieldResult.length > 0)
@@ -49,6 +53,7 @@ export class Mapper {
           _id: item._id.toString(),
           fields: fieldResult,
           name: item.name,
+          referenceIds: item.referencesIds.map(i => i.toString()),
         });
     }
 
@@ -80,7 +85,8 @@ export class Mapper {
     const values = <IImageModel[]>data.value;
 
     const imageResult: ImageType[] = [];
-    for (const imageValue of values) {
+
+    values.forEach((imageValue, index) => {
       const traduction = imageValue.traduction.find(
         (traduction) => traduction.language == data.language,
       );
@@ -89,10 +95,10 @@ export class Mapper {
         imageResult.push({
           name: traduction.name,
           uri: imageValue.uri,
-          order: imageValue.order,
-          type: imageValue.typeImage
+          order: imageValue.order ?? index,
+          type: imageValue.typeImage,
         });
-    }
+    });
 
     if (imageResult.length == 0) return null;
 

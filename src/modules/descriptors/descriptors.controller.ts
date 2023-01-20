@@ -6,13 +6,18 @@ import { GetItemsParams } from './dto/get-items.params';
 export class DescriptorsController {
   constructor(private readonly descriptorsService: DescriptorsService) {}
 
-  @Get(':language-:country/:descriptorId')
-  async GetItems(@Param() params: GetItemsParams){
+  @Get(':id')
+  async filterDescriptorById(@Param('id') id: string){
+    return await this.descriptorsService.filterDescriptorById(id);
+  }
+
+  @Get('/:descriptorId/:language-:country/items')
+  async getItems(@Param() params: GetItemsParams){
       return await this.descriptorsService.GetItems(params);
   }
 
   @Get()
-  Get(){
+  get(){
     return 'hello descriptor'
   }
 }

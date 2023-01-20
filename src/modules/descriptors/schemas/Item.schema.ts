@@ -11,7 +11,7 @@ export interface ItemModel {
   fields?: Array<IFieldValueModel>;
   countries?: Array<String>;
   isActive: boolean;
-  referencesIds: Array<Number>;
+  referencesIds: Array<String>;
 }
 
 export const ItemSchema = new mongoose.Schema<ItemModel>({
@@ -20,5 +20,5 @@ export const ItemSchema = new mongoose.Schema<ItemModel>({
   fields: [{ type: Object }],
   countries: [{ type: String }],
   isActive: { type: Boolean, required: true, default: true },
-  referencesIds: [{ type: Number }], 
+  referencesIds: [{ type: String }], 
 },);
